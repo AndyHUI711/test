@@ -1,0 +1,55 @@
+cd ~/catkin_ws
+catkin_make
+. ~/catkin_ws/devel/setup.bash
+rospack depends1
+
+rosrun key_move key_teleop.py
+roslaunch hector_slam_launch tutorial.launch
+
+cd ~/catkin_ws/src
+
+##new pkg
+catkin_create_pkg point_and_lines std_msgs rospy roscpp sensor_msgs visualization_msgs cv_bridge geometry_msgs
+cd ~/catkin_ws
+catkin_make
+. ~/catkin_ws/devel/setup.bash
+
+##新建文件夹
+mkdir rviz
+
+##新建程序
+touch shape.py
+
+
+## launch project
+cd ~/catkin_ws
+catkin_make
+. ~/catkin_ws/devel/setup.bash
+roslaunch begin.launch 2>/dev/null
+
+
+## launch coppeliasim
+cd ~/CoppeliaSim_Edu_V4_2_0_Ubuntu20_04
+./coppeliaSim.sh
+
+
+
+<node pkg="key_move" type="key_teleop.py" name="key_move" output="screen"/>
+<node pkg="image_detection" type="image_detection.py" name="image_detection"/>
+<node pkg="image_detection" type="image_detection.py" name="image_detection"/>
+
+<node pkg="show_path" type="show_path" name="show_path"/>
+. ~/catkin_ws/devel/setup.bash
+rosrun image_detection image_detection.py
+
+    <param name="face_detection_dataset" value="$(find image_detec)/dataset/haarcascade_frontalface_default.xml"/>
+  
+    <param name="face_recognition_dataset_num" value="16"/>
+  
+    <param name="face_recognition_dataset1" value="$(find image_detec)/imgs/obama"/>
+    <param name="face_recognition_dataset2" value="$(find image_detec)/imgs/avril"/>
+    <param name="face_recognition_dataset3" value="$(find image_detec)/imgs/cartoon"/>
+    <param name="face_recognition_dataset4" value="$(find image_detec)/imgs/zhang"/>
+    <param name="face_recognition_dataset5" value="$(find image_detec)/imgs/elf"/>
+    
+    <node pkg="image_detec" type="face" name="image_detec" output="screen"/>
